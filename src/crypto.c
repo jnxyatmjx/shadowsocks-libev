@@ -42,6 +42,7 @@
 #include "aead.h"
 #include "utils.h"
 #include "ppbloom.h"
+#include "none.h"
 
 int
 balloc(buffer_t *ptr, size_t capacity)
@@ -194,6 +195,26 @@ crypto_init(const char *password, const char *key, const char *method)
                 .ctx_release = &aead_ctx_release,
             };
             memcpy(crypto, &tmp, sizeof(crypto_t));
+            return crypto;
+        }
+
+        // none encrytp
+        {
+            cipher_t *cipher = none_init(password, key, method);
+            if (cipher == NULL)
+                return NULL;
+            crypto_t *crypto = (crypto_t *)ss_malloc(sizeof(crypto_t));
+            crypto_t tmp     = {
+                .cipher      = cipher,
+                .encrypt_all = &none_encrypt_all,
+                .decrypt_all = &none_decrypt_all,
+                .encrypt     = &none_encrypt,
+                .decrypt     = &none_decrypt,
+                .ctx_init    = &none_ctx_init,
+                .ctx_release = &none_ctx_release,
+            };
+            memcpy(crypto, &tmp, sizeof(crypto_t));
+            LOGI("None ciphers just fly youself.");
             return crypto;
         }
     }
