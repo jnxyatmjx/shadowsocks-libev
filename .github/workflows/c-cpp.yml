@@ -20,11 +20,14 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+    # This step references the directory that contains the action.
+      #- uses: ./.github/actions/hello-world-action
+    # This step checks out a copy of your repository.
     - uses: actions/checkout@v3
-    - name: configure
+    - name: cmake-configure
       run: |
         sudo apt-get install --no-install-recommends gettext build-essential autoconf libtool libpcre3-dev asciidoc xmlto libev-dev libc-ares-dev automake libmbedtls-dev libsodium-dev pkg-config
         git submodule update --init --recursive
         mkdir bld_ && cd bld_ && cmake ../
-    - name: make
-      run: cd bld_ && make -j4
+    - name: cmake-make
+      run: cd bld_ && make -j8
