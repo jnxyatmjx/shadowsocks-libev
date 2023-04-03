@@ -22,6 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: configure
+      run: apt install --no-install-recommends gettext build-essential autoconf libtool libpcre3-dev asciidoc xmlto libev-dev libc-ares-dev automake libmbedtls-dev libsodium-dev pkg-config
       run: mkdir bld_ && cd bld_ && cmake ../
     - name: make
       run: make -j4
