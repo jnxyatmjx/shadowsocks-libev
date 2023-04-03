@@ -28,6 +28,9 @@ jobs:
       run: |
         sudo apt-get install --no-install-recommends gettext build-essential autoconf libtool libpcre3-dev asciidoc xmlto libev-dev libc-ares-dev automake libmbedtls-dev libsodium-dev pkg-config
         git submodule update --init --recursive
-        mkdir bld_ && cd bld_ && cmake ../
+        mkdir bld_ 
+        cd bld_ && cmake ../
     - name: cmake-make
-      run: cd bld_ && make -j8
+      run: |
+        echo -e "$(nproc) thread compile"
+        cd bld_ && make -j$(nproc) || make -j1 || make -j1 V=s
