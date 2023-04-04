@@ -36,4 +36,11 @@ jobs:
     - name: cmake-make
       run: |
         echo -e "$(nproc) thread compile"
-        cd bld_ && make -j$(nproc) || make -j1 || make -j1 V=s
+        cd bld_
+        make -j$(nproc) || make -j1 || make -j1 V=s
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
