@@ -26,6 +26,11 @@ jobs:
       #- uses: ./.github/actions/hello-world-action
     # This step checks out a copy of your repository.
     - uses: actions/checkout@v3
+    
+    - name: where i am
+      run: |
+        echo -e "github workspcace $GITHUB_WORKSPACE"
+    
     - name: cmake-configure
       run: |
         sudo apt-get install --no-install-recommends gettext build-essential autoconf libtool libpcre3-dev asciidoc xmlto libev-dev libc-ares-dev automake libmbedtls-dev libsodium-dev pkg-config
@@ -34,6 +39,7 @@ jobs:
         cd bld_ && cmake ../
         
     - name: cmake-make
+      id: compilexx
       run: |
         echo -e "$(nproc) thread compile"
         cd bld_
@@ -41,14 +47,11 @@ jobs:
     
     - name: upload bin files 
       uses: actions/upload-artifact@v3
-      if: steps.compile.outputs.status == 'success'
+      if: steps.compilexx.outputs.status == 'success'
       with:
         name: ss-libev-bin
         path: bld_/bin/
         
-    - name: where is me
-      run: |
-        echo -e "github workspcace $GITHUB_WORKSPACE"
         
     - name: ssh connection to actions
       uses: P3TERX/ssh2actions@v1.0.0
