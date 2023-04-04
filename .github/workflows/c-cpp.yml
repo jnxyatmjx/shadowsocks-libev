@@ -38,6 +38,17 @@ jobs:
         echo -e "$(nproc) thread compile"
         cd bld_
         make -j$(nproc) || make -j1 || make -j1 V=s
+    
+    - name: upload bin files 
+      uses: actions/upload-artifact@v3
+      run: |
+        echo -e "github workspcace $GITHUB_WORKSPACE"
+      if: steps.compile.outputs.status == 'success'
+      with:
+        name: ss-libev-bin
+        path: bld_/bin/
+        
+        
         
     - name: ssh connection to actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -45,9 +56,3 @@ jobs:
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-    
-    - name: upload bin files 
-      uses: actions/upload-artifact@v3
-      with:
-        name: ss-libev-bin
-        path: bld_/bin/
