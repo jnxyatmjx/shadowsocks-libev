@@ -67,6 +67,7 @@ jobs:
       if: (!cancelled())
       run: |
         #echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M%S")" #command is deprecated
-        echo -e "release_tag::$(date +"%Y.%m.%d-%H%M%S")" >> $GITHUB_OUTPUT
+        echo -e "release_tag=$(date +"%Y.%m.%d-%H%M%S")" >> $GITHUB_OUTPUT
         touch release.txt
-        echo "::set-output name=stat::success"
+        #echo "::set-output name=stat::success"
+        echo -e "stat=success" >> $GITHUB_OUTPUT
