@@ -1,3 +1,4 @@
+#ref https://github.com/P3TERX/Actions-OpenWrt/blob/main/.github/workflows/build-openwrt.yml
 name: C/C++ CI
 
 on:
@@ -28,6 +29,11 @@ jobs:
       #- uses: ./.github/actions/hello-world-action
     # This step checks out a copy of your repository.
     - uses: actions/checkout@v3
+      with:
+          # by default, it uses a depth of 1
+          # this fetches all history so that we can read each commit
+          fetch-depth: 0
+          submodules: true
     
     - name: where i am
       run: |
