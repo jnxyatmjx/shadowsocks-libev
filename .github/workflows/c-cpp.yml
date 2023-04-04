@@ -9,7 +9,7 @@ on:
     branches: [ "master" ]
     inputs:
       ssh:
-        description: 'SSH connection to Actions'
+        description: 'ssh connection to actions'
         required: false
         default: 'false'
 
@@ -38,18 +38,10 @@ jobs:
         echo -e "$(nproc) thread compile"
         cd bld_
         make -j$(nproc) || make -j1 || make -j1 V=s
-    - name: SSH connection to Actions
+        
+    - name: ssh connection to actions
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        
-    - name: ssh commands using password
-      uses: appleboy/ssh-action@v0.1.8
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: whoami
