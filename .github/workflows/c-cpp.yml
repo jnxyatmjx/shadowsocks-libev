@@ -15,7 +15,6 @@ on:
 
 jobs:
   build:
-
     #runs-on: ubuntu-latest
     runs-on: ${{ matrix.os }}
     strategy:
@@ -33,6 +32,7 @@ jobs:
         git submodule update --init --recursive
         mkdir bld_ 
         cd bld_ && cmake ../
+        
     - name: cmake-make
       run: |
         echo -e "$(nproc) thread compile"
@@ -41,14 +41,14 @@ jobs:
     
     - name: upload bin files 
       uses: actions/upload-artifact@v3
-      run: |
-        echo -e "github workspcace $GITHUB_WORKSPACE"
       if: steps.compile.outputs.status == 'success'
       with:
         name: ss-libev-bin
         path: bld_/bin/
         
-        
+    - name: where is me
+      run: |
+        echo -e "github workspcace $GITHUB_WORKSPACE"
         
     - name: ssh connection to actions
       uses: P3TERX/ssh2actions@v1.0.0
