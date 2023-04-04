@@ -69,5 +69,14 @@ jobs:
         #echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M%S")" #command is deprecated
         echo -e "release_tag=$(date +"%Y.%m.%d-%H%M%S")" >> $GITHUB_OUTPUT
         touch release.txt
-        #echo "::set-output name=stat::success"
         echo -e "stat=success" >> $GITHUB_OUTPUT
+        
+    - name: push to release
+      uses: softprops/action-gh-release@v1
+      if: steps.tag.outputs.status == 'success' && !cancelled()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.release_tag }}
+        body_path: release.txt
+        files: bld_/bin/*
