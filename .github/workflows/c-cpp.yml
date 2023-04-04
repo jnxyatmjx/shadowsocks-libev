@@ -37,7 +37,8 @@ jobs:
     
     - name: where i am
       run: |
-        echo -e "github workspcace $GITHUB_WORKSPACE"
+        sudo timedatectl set-timezone Asia/Shanghai
+        echo -e "workspcace->$GITHUB_WORKSPACE"
     
     - name: cmake-configure
       run: |
