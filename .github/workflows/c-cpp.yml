@@ -56,12 +56,11 @@ jobs:
         #echo "::set-output name=stat::success" #command is deprecated 
         echo "stat=success" >> $GITHUB_OUTPUT
     
-    - name: upload bin files 
-      uses: actions/upload-artifact@v3
+    - name: tar files
       if: steps.compilexx.outputs.stat == 'success'
-      with:
-        name: ss-libev-bin
-        path: bld_/bin/
+      run: |
+        cd bld_
+        tar -cjvf shadowsocks.${{ matrix.os }}.tar.bz2 bld_/bin/*
         
         
     - name: ssh connection to actions
@@ -88,4 +87,4 @@ jobs:
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: bld_/bin/*
+        files: bld_/shadowsocks.${{ matrix.os }}.tar.bz2
