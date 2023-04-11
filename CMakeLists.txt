@@ -47,6 +47,8 @@ include(${PROJECT_SOURCE_DIR}/cmake/configure.cmake)
 configure_file(${PROJECT_SOURCE_DIR}/cmake/config.h.cmake ${PROJECT_BINARY_DIR}/src/config.h)
 add_definitions(-I${PROJECT_BINARY_DIR}/src)
 add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-Wall -Werror -Wno-error=format-overflow)
+#add_definitions(-Wno-error=strict-aliasing)
 
 # pkg-config
 configure_file(

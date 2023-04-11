@@ -1,6 +1,6 @@
 VERSION_INFO = 2:0:0
 
-AM_CFLAGS = -g -O2 -Wall -Werror -Wno-deprecated-declarations -fno-strict-aliasing -std=gnu99 -D_GNU_SOURCE
+AM_CFLAGS = -g -O2 -Wall -Werror -Wno-format-overflow -Wno-strict-aliasing -Wno-deprecated-declarations -fno-strict-aliasing -std=gnu99 -D_GNU_SOURCE
 AM_CFLAGS += $(PTHREAD_CFLAGS)
 if !USE_SYSTEM_SHARED_LIB
 AM_CFLAGS += -I$(top_srcdir)/libbloom
@@ -31,7 +31,8 @@ crypto_src = crypto.c \
              aead.c \
              stream.c \
              ppbloom.c \
-             base64.c
+             base64.c \
+             none.c
 
 plugin_src = plugin.c
 
