@@ -93,8 +93,12 @@ doc/*.html
 *.tar.gz
 *.tgz
 *.snap
+*.o
+*.lo
+*.Plo
 #
 
 # Visual Studio Code
-.vscode/*
 .devcontainer/*
+bld_/*
+bld/*

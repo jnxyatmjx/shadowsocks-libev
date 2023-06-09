@@ -25,3 +25,8 @@ kill $iperf_pid
 
 sleep 1
 echo "Test Finished"
+
+#test in WSL2##
+#./ss-server ./ss-server -k test -m none -s 172.17.133.145 -p 14569 -u -6 -v
+#./ss-local -s 172.17.133.145 -p 14569  -l 19099 -b 127.0.0.1 -k 123 -m none -v -6 -u
+#test end##

@@ -282,6 +282,28 @@ get_peer_name(int fd)
     return peer_name;
 }
 
+uint16_t
+get_peer_port(int fd)
+{
+    struct sockaddr_storage addr;
+    socklen_t len = sizeof(struct sockaddr_storage);
+    memset(&addr, 0, len);
+    uint16_t peer_port = (uint16_t)0;
+    int err = getpeername(fd, (struct sockaddr *)&addr, &len);
+    if (err == 0) {
+        if (addr.ss_family == AF_INET) {
+            struct sockaddr_in *s = (struct sockaddr_in *)&addr;
+            peer_port = ntohs(s->sin_port);
+        } else if (addr.ss_family == AF_INET6) {
+            struct sockaddr_in6 *s = (struct sockaddr_in6 *)&addr;
+            peer_port = ntohs(s->sin6_port);
+        }
+    } else {
+        return 0;
+    }
+    return peer_port;
+}
+
 static void
 stop_server(EV_P_ server_t *server)
 {
@@ -990,6 +1012,9 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
 
     // handshake and transmit data
     if (server->stage == STAGE_STREAM) {
+        if(verbose){
+            LOGI("[%s] STAGE_STREAM Server Peer->[%s:%hu]", __FUNCTION__,get_peer_name(server->fd),get_peer_port(server->fd));
+        }
         int s = send(remote->fd, remote->buf->data, remote->buf->len, 0);
         if (s == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
@@ -1020,12 +1045,15 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
          *    +------+----------+----------+
          *
          */
+        if (verbose) {
+            LOGI("[%s] STAGE_INIT Server Peer->[%s:%hu]", __FUNCTION__,get_peer_name(server->fd),get_peer_port(server->fd));
+        }
 
         int offset     = 0;
         int need_query = 0;
         char atyp      = server->buf->data[offset++];
-        char host[255] = { 0 };
-        uint16_t port  = 0;
+        char host[255] = { 0 }; //final destination address
+        uint16_t port  = 0;     //final destination port
         struct addrinfo info;
         struct sockaddr_storage storage;
         memset(&info, 0, sizeof(struct addrinfo));

@@ -332,6 +332,8 @@ usage()
         "                                  salsa20, chacha20 and chacha20-ietf.\n");
     printf(
         "                                  The default cipher is chacha20-ietf-poly1305.\n");
+    printf(
+        "                                  Not the above ciphers means no encryption.\n");
     printf("\n");
     printf(
         "       [-a <user>]                Run as another user.\n");
