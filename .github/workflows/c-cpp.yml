@@ -87,3 +87,9 @@ jobs:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: bld_/shadowsocks.${{ matrix.os }}.tar.bz2
+
+    - name: send messages
+      if: always()
+      run: |
+      curl -SL --url "https://api.telegram.org/bot${{ secrets.API_TOKEN }}/sendmessage?chat_id=${{ secrets.CHAT_ID }}&text=${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}"
+
