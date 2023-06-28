@@ -91,6 +91,6 @@ jobs:
     - name: send messages
       if: success() || failure()
       run: |
-        curl -SL --url "https://api.telegram.org/bot${{ secrets.API_TOKEN }}/sendmessage?chat_id=${{ secrets.CHAT_ID }}\&text=${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}"
-        echo -e "${{ secrets.CHAT_ID }}"
+        curl -SL --url "https://api.telegram.org/bot${{ secrets.TG.API_TOKEN }}/sendmessage?chat_id=${{ secrets.TG.CHAT_ID }}\&text=${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}"
+        echo -e "${{ secrets.TG.CHAT_ID }}"
 
