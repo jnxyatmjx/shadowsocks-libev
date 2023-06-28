@@ -89,6 +89,7 @@ jobs:
         files: bld_/shadowsocks.${{ matrix.os }}.tar.bz2
 
     - name: send messages
+      id: mksd
       if: success() || failure()
       run: |
       #curl -SL --url "https://api.telegram.org/bot${{ secrets.API_TOKEN }}/sendmessage?chat_id=${{ secrets.CHAT_ID }}\&text=${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}"
