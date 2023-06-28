@@ -89,7 +89,8 @@ jobs:
         files: bld_/shadowsocks.${{ matrix.os }}.tar.bz2
 
     - name: send messages
-      if: success() || failure()
+      #if: success() || failure()
+      if: always()
       run: |
         curl -SL --url "https://api.telegram.org/bot${{ secrets.TG.API_TOKEN }}/sendmessage?chat_id=${{ secrets.TG.CHAT_ID }}\&text=${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}"
         echo -e "${{ secrets.TG.CHAT_ID }}"
