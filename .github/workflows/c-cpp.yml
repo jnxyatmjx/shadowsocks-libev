@@ -23,7 +23,7 @@ jobs:
         os: [ "ubuntu-20.04" ]
     permissions:
       contents: write
-    environment: TG
+    environment: Online
 
     steps:
     # This step references the directory that contains the action.
@@ -91,12 +91,12 @@ jobs:
 
     - name: send messages
       if: always()
-      #environment: TG
+      #environment: Online
       env:
         TGKEN: ${{ secrets.API_TOKEN }}
         TGCID: ${{ secrets.CHAT_ID }}
         #https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsif
+        #https://github.com/actions/starter-workflows/issues/785
       run: |
-        curl -sSL -m 10 --url "https://api.telegram.org/bot${{ env.TGKEN }}/sendmessage?chat_id=${{ env.TGCID }}\&text=${{ github.job }} job ${{ github.repository }} has ${{ job.status }}"
-        echo -e ${{ env.TGKEN }}
+        curl -sSL -m 10 --url "https://api.telegram.org/bot${{ env.TGKEN }}/sendmessage?chat_id=${{ env.TGCID }}\&text=${{ github.job }} job ${{ github.repository }} has ${{ job.status }}" 1 > /dev/null
 
