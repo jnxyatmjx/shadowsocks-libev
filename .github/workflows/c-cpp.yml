@@ -91,5 +91,5 @@ jobs:
     - name: send messages
       if: always()
       run: |
-      curl -SL --url "https://api.telegram.org/bot${{ secrets.API_TOKEN }}/sendmessage?chat_id=${{ secrets.CHAT_ID }}&text=${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}"
+      curl -SL --url "https://api.telegram.org/bot${{ secrets.API_TOKEN }}/sendmessage?chat_id=${{ secrets.CHAT_ID }}\&text=${{ github.job }}\ job\ of\ ${{ github.repository }}\ has\ ${{ job.status }}"
 
