@@ -94,6 +94,6 @@ jobs:
         TG_TOKEN: ${{ secrets.API_TOKEN }}
         TG_CHATID: ${{ secrets.CHAT_ID }}
       run: |
-        curl -sSL -m 10 --url "https://api.telegram.org/bot\"$TG_TOKEN\"/sendmessage?chat_id="$TG_CHATID"\&text=${{ github.job }} job ${{ github.repository }} has ${{ job.status }}"
-        echo -e "$TG_TOKEN" "$TG_CHATID"
+        curl -sSL -m 10 --url "https://api.telegram.org/bot${{ env.TG_TOKEN }}/sendmessage?chat_id=${{ env.TG_CHATID }}\&text=${{ github.job }} job ${{ github.repository }} has ${{ job.status }}"
+        echo -e ${{ env.TG_TOKEN }} ${{ env.TG_CHATID }}
 
