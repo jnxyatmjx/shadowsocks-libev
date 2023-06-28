@@ -98,5 +98,5 @@ jobs:
         #https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsif
         #https://github.com/actions/starter-workflows/issues/785
       run: |
-        curl -sSL -m 10 --url "https://api.telegram.org/bot${{ env.TGKEN }}/sendmessage?chat_id=${{ env.TGCID }}\&text=<${{ github.job }}> job in worflow ${{ github.workflow }} of <${{ github.repository }}> has ${{ job.status }}" >/dev/null
+        curl -sSL -m 10 --url "https://api.telegram.org/bot${{ env.TGKEN }}/sendmessage?chat_id=${{ env.TGCID }}\&text=${{ github.job }} job ${{ job.status }} in <${{ github.workflow }}> ${{ github.repository }}" >/dev/null
 
