@@ -91,10 +91,10 @@ jobs:
     - name: send messages
       if: always()
       env:
-        TGKEN: '${{ secrets.API_TOKEN }}'
-        TGCID: '${{ secrets.CHAT_ID }}'
+        TGKEN: ${{ secrets.API_TOKEN }}
+        TGCID: ${{ secrets.CHAT_ID }}
         #https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsif
       run: |
         curl -sSL -m 10 --url "https://api.telegram.org/bot${{ env.TGKEN }}/sendmessage?chat_id=${{ env.TGCID }}\&text=${{ github.job }} job ${{ github.repository }} has ${{ job.status }}"
-        echo -e ${{ env.TGKEN }} ${{ env.TGCID }}
+        echo -e "$TGKEN"
 
