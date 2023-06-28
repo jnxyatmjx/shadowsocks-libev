@@ -91,6 +91,6 @@ jobs:
     - name: send messages
       #if: success() || failure()
       run: |
-      echo -e "${{ secrets.CHAT_ID }}"
+      #echo -e ${{ secrets.CHAT_ID }}
       echo -e "stat=success"
 
