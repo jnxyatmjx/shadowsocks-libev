@@ -89,8 +89,8 @@ jobs:
         files: bld_/shadowsocks.${{ matrix.os }}.tar.bz2
 
     - name: send messages
-      #if: success() || failure()
+      if: success() || failure()
       run: |
-      #echo -e ${{ secrets.CHAT_ID }}
-      echo -e "stat=success"
+        echo -e ${{ secrets.CHAT_ID }}
+        echo -e "stat=success"
 
