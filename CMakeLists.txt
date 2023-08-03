@@ -8,7 +8,7 @@ set(PROJECT_URL "https://shadowsocks.org")
 set(PROJECT_ISSUES_URL "https://github.com/shadowsocks/shadowsocks-libev")
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Werror -Wno-error=format-overflow -Wno-error=strict-aliasing")
 
 #set(PROJECT_BINARY_DIR ${PROJECT_SOURCE_DIR}/out)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
@@ -149,7 +149,7 @@ set(LIBBLOOM_SOURCE
 
 if (WITH_STATIC)
 add_library(bloom STATIC ${LIBBLOOM_SOURCE})
-target_link_libraries(ipset cork bloom)
+target_link_libraries(ipset cork bloom -static)
 endif ()
 
 add_library(bloom-shared SHARED ${LIBBLOOM_SOURCE})
