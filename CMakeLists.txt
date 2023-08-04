@@ -48,7 +48,7 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/config.h.cmake ${PROJECT_BINARY_DIR}/
 add_definitions(-I${PROJECT_BINARY_DIR}/src)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-Wall -Werror -Wno-error=format-overflow)
-#add_definitions(-Wno-error=strict-aliasing)
+add_definitions(-Wno-error=strict-aliasing)
 
 # pkg-config
 configure_file(
@@ -149,7 +149,7 @@ set(LIBBLOOM_SOURCE
 
 if (WITH_STATIC)
 add_library(bloom STATIC ${LIBBLOOM_SOURCE})
-target_link_libraries(ipset cork bloom -static)
+target_link_libraries(ipset cork bloom)
 endif ()
 
 add_library(bloom-shared SHARED ${LIBBLOOM_SOURCE})
