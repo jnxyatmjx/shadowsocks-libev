@@ -29,7 +29,7 @@ jobs:
       # This step references the directory that contains the action.
         #- uses: ./.github/actions/hello-world-action
       # This step checks out a copy of your repository.
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
             # by default, it uses a depth of 1
             # this fetches all history so that we can read each commit
@@ -66,7 +66,7 @@ jobs:
           echo "stat=oxk" >> $GITHUB_OUTPUT
 
       - name: upload file & directory
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: steps.tartt.outputs.stat == 'oxk'
         with:
           name: ${{ matrix.os }}
@@ -91,12 +91,12 @@ jobs:
           sudo mkdir $GITHUB_WORKSPACE/rellxx
           sudo chown $USER:$GROUPS $GITHUB_WORKSPACE/rellxx
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: ubuntu-20.04
           path: ${{ github.workspace }}/rellxx
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: ubuntu-22.04
           path: ${{ github.workspace }}/rellxx
@@ -110,7 +110,7 @@ jobs:
           echo -e "stat=success" >> $GITHUB_OUTPUT
 
       - name: push to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: steps.tag.outputs.stat == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
