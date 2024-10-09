@@ -1,5 +1,5 @@
 #ref https://github.com/P3TERX/Actions-OpenWrt/blob/main/.github/workflows/build-openwrt.yml
-name: C/C++ CI
+name: Multiple Platform
 
 on:
   push:
@@ -103,7 +103,6 @@ jobs:
 
       - name: generate release tag
         id: tag
-        if: !cancelled()
         run: |
           #echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M%S")" #command is deprecated
           echo -e "release_tag=$(date +"%Y.%m.%d-%H%M%S")" >> $GITHUB_OUTPUT
@@ -112,7 +111,7 @@ jobs:
 
       - name: push to release
         uses: softprops/action-gh-release@v1
-        if: steps.tag.outputs.stat == 'success' && !cancelled()
+        if: steps.tag.outputs.stat == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
