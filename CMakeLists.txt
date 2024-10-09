@@ -8,7 +8,7 @@ set(PROJECT_URL "https://shadowsocks.org")
 set(PROJECT_ISSUES_URL "https://github.com/shadowsocks/shadowsocks-libev")
 project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Werror -Wno-error=format-overflow -Wno-error=strict-aliasing")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Werror -Wno-error=format-overflow -Wno-error=strict-aliasing -Wno-error=deprecated-declarations")
 
 #set(PROJECT_BINARY_DIR ${PROJECT_SOURCE_DIR}/out)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
@@ -49,6 +49,7 @@ add_definitions(-I${PROJECT_BINARY_DIR}/src)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-Wall -Werror -Wno-error=format-overflow)
 add_definitions(-Wno-error=strict-aliasing)
+add_definitions(-Wno-error=deprecated-declarations)
 
 # pkg-config
 configure_file(
