@@ -1,0 +1,121 @@
+#ref https://github.com/P3TERX/Actions-OpenWrt/blob/main/.github/workflows/build-openwrt.yml
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+    branches: [ "master" ]
+    inputs:
+      ssh:
+        description: 'ssh connection to actions'
+        required: false
+        default: 'false'
+
+jobs:
+  build:
+    #runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ "ubuntu-20.04", "ubuntu-22.04" ]
+    permissions:
+      contents: write
+    environment: Online
+
+    steps:
+      # This step references the directory that contains the action.
+        #- uses: ./.github/actions/hello-world-action
+      # This step checks out a copy of your repository.
+      - uses: actions/checkout@v3
+        with:
+            # by default, it uses a depth of 1
+            # this fetches all history so that we can read each commit
+            fetch-depth: 0
+            submodules: true
+
+      - name: where i am
+        run: |
+          sudo timedatectl set-timezone Asia/Shanghai
+          echo -e "workspcace->$GITHUB_WORKSPACE"
+
+      - name: cmake-configure
+        run: |
+          sudo apt-get install --no-install-recommends gettext build-essential autoconf libtool libpcre3-dev asciidoc xmlto libev-dev libc-ares-dev automake libmbedtls-dev libsodium-dev pkg-config
+          git submodule update --init --recursive
+          mkdir bld_
+          cd bld_ && cmake -DCMAKE_BUILD_TYPE="MinSizeRel" ../
+
+      - name: cmake-make
+        id: compilexx
+        run: |
+          echo -e "$(nproc) thread compile"
+          cd bld_
+          make -j$(nproc) || make -j1 || make -j1 V=s
+          strip bin/ss-*
+          #echo "::set-output name=stat::success" #command is deprecated
+          echo "stat=success" >> $GITHUB_OUTPUT
+
+      - name: tar files
+        id: tartt
+        if: steps.compilexx.outputs.stat == 'success'
+        run: |
+          tar -cjvf bld_/shadowsocks.${{ matrix.os }}.tar.bz2 bld_/bin/*
+          echo "stat=oxk" >> $GITHUB_OUTPUT
+
+      - name: upload file & directory
+        uses: actions/upload-artifact@v3
+        if: steps.tartt.outputs.stat == 'oxk'
+        with:
+          name: ${{ matrix.os }}
+          path: bld_/shadowsocks.${{ matrix.os }}.tar.bz2
+
+########################################Merge all workflows################################################
+  mergeall:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: create release folder
+        run: |
+          sudo timedatectl set-timezone Asia/Shanghai
+          sudo mkdir $GITHUB_WORKSPACE/rellxx
+          sudo chown $USER:$GROUPS $GITHUB_WORKSPACE/rellxx
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: ubuntu-20.04
+          path: ${{ github.workspace }}/rellxx
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: ubuntu-22.04
+          path: ${{ github.workspace }}/rellxx
+
+      - name: generate release tag
+        id: tag
+        if: !cancelled()
+        run: |
+          #echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M%S")" #command is deprecated
+          echo -e "release_tag=$(date +"%Y.%m.%d-%H%M%S")" >> $GITHUB_OUTPUT
+          touch release.txt
+          echo -e "stat=success" >> $GITHUB_OUTPUT
+
+      - name: push to release
+        uses: softprops/action-gh-release@v1
+        if: steps.tag.outputs.stat == 'success' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: release.txt
+          files: ${{ github.workspace }}/rellxx/*
